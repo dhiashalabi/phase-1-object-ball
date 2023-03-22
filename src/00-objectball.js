@@ -145,6 +145,80 @@ function teamNames(){
     return teamNames;
 }
 
+function mostPointsScored(){
+    const gameObj=gameObject();
+    const teams=Object.values(gameObj);
+    let players=[];
+    teams.forEach(team=>{
+        let curPlayers=Object.entries(team.players);
+        players=players.concat(curPlayers);
+    });
+    let highestScore=players[0][1].points;
+    let highestScorePlayer=players[0][0];
+    for(let i=1; i<players.length; i++){
+        const curScore=players[i][1].points;
+        const curPlayer=players[i][0];
+        if(curScore>highestScore){
+            highestScore=curScore;
+            highestScorePlayer=curPlayer;
+        }
+    }
+    return highestScorePlayer;
+}
+
+function winningTeam(){
+    const gameObj=gameObject();
+    const teams=Object.values(gameObj);
+    let winningTeam=teams[0];
+    let maxPoints=getTotalPoints(winningTeam);
+    for(let i=1; i<teams.length; i++){
+        const totalPoints=getTotalPoints(teams[i]);
+        if(totalPoints>maxPoints){
+            winningTeam=teams[i];
+            maxPoints=getTotalPoints(winningTeam);
+        }
+    }
+    return winningTeam.name;
+}
+
+function getTotalPoints(team){
+    const players=team.players;
+    const stats=Object.values(players);
+    let totalPoints=0;
+    stats.forEach(stat=>{
+        totalPoints+=stat.points;
+    });
+    return totalPoints;
+}
+
+function doesLongNameStealATon(){
+    const gameObj=gameObject();
+    const teams=Object.values(gameObj);
+    let players=[];
+    teams.forEach(team=>{
+        let curPlayers=Object.entries(team.players);
+        players=players.concat(curPlayers);
+    });
+    let longestNamePlayer=players[0][0];
+    let longestNameLength=longestNamePlayer.length;
+    let mostStealsPlayer=players[0][0];
+    let mostSteals=players[0][1].steals;
+    for(let i=1; i<players.length; i++){
+        const curPlayer=players[i][0];
+        const curPlayerStats=players[i][1];
+        const curPlayerSteals=curPlayerStats.steals;
+        if(curPlayer.length>longestNameLength){
+            longestNamePlayer=curPlayer;
+            longestNameLength=curPlayer.length;
+        }
+        if(curPlayerSteals>mostSteals){
+            mostStealsPlayer=curPlayer;
+            mostSteals=curPlayerSteals;
+        }
+    }
+    return longestNamePlayer==mostStealsPlayer;
+}
+
 function gameObject2(){
     return {
         "home":{
